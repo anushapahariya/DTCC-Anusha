@@ -127,12 +127,12 @@ with col5:
 st.subheader("UPLOAD REGULATIONS")
 
 # Upload New Regulation
-new_pdf = st.file_uploader("Upload New Regulation PDF", type=["pdf"])
+new_pdf = st.file_uploader("Upload Latest Regulation PDF", type=["pdf"])
 
 # Upload Old Regulation (if comparing)
 old_pdf = None
 if action == "Compare Previous vs Latest Regulation":
-    old_pdf = st.file_uploader("Upload Old Regulation PDF", type=["pdf"])
+    old_pdf = st.file_uploader("Upload Previous Regulation PDF", type=["pdf"])
 
 # Upload Button
 if st.button("Upload"):
