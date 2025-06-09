@@ -11,7 +11,7 @@ st.markdown("""
         }
 
         section[data-testid="stSidebar"] {
-            background-color: #f0f0f0 !important;
+            background-color: #f0f0f0;
         }
 
          .header {
@@ -41,7 +41,7 @@ st.markdown("""
         }
 
         details[open] > summary ~ * {
-            background-color: white !important;
+            background-color: white;
             padding: 16px;
             border-radius: 0 0 8px 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -50,32 +50,11 @@ st.markdown("""
         details {
             margin-bottom: 20px;
         }
-                 /* Expander header  */
-        summary {
-            background-color: #003366 ;
-            color: white !important;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 8px 8px 0 0;
-            font-weight: 800; /* extra bold */
-            font-family: serif;
-        }
-
-        /* Expander content box */
-        details[open] > summary ~ * {
-            background-color: white !important;
-            padding: 16px;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        /* Space between expanders (if multiple used) */
-        details {
-            margin-bottom: 20px;
-        }
-        div.stButton > button {
+        
+    div.stButton > button {
     background-color: #fffff;
     color: black;
+    font-family: serif;
     font-weight: bold;
     border: None;
     border-radius: 8px;
@@ -99,7 +78,7 @@ st.markdown("""
 
 # ---------- SIDEBAR ----------
 with st.sidebar:
-    st.header("AURA")
+    st.header("📑 AURA")
 
     # Regulation selection
     selected_regulation = st.selectbox("Choose Regulation:", [
@@ -112,16 +91,17 @@ with st.sidebar:
         "New Regulation"
     ])
     st.markdown("-----------------------------")
-    if st.button("History"):
+    if st.button(" 🕰️ View History"):
         st.info("Getting history")
-    st.markdown("-----------------------------")
-    if st.button("Documentation"):
+    if st.button("🔍 Summary"):
+        st.info("Getting Summary")
+    if st.button("📄 View Documentation"):
         st.info("Getting history")
 
 
 # ---------- MAIN PAGE ----------
 
-st.subheader("Dashboard")
+st.subheader("DASHBOARD")
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
@@ -144,7 +124,7 @@ with col5:
     if st.button("🏠 Home Page"):
         st.info("Go to home page selected.")
 
-st.subheader("Upload Regulations")
+st.subheader("UPLOAD REGULATIONS")
 
 # Upload New Regulation
 new_pdf = st.file_uploader("Upload New Regulation PDF", type=["pdf"])
@@ -166,8 +146,5 @@ if st.button("Upload"):
             st.success(f"Uploaded New Regulation PDF: {new_pdf.name}")
         else:
             st.warning("Please upload the New Regulation PDF.")
-with st.expander("OUR USE CASE"):
-    st.markdown("""
-Develop models to automatically analyze and interpret financial regulations, public legal documents, and compliance policies, ensuring adherence to relevant laws and guidelines. Illustrative examples include tracking changes in financial regulations and impact assessments, monitoring AML & KYC compliance, creating automated compliance checks.    """)
 
 st.markdown("-----------------------------")
