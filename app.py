@@ -1,15 +1,20 @@
 import streamlit as st
 
+# Page configuration
 st.set_page_config(page_title="AURA", layout="wide")
 
+# ---------- CSS Styling ----------
 st.markdown("""
     <style>
-        html, body, [data-testid="stApp"] {
-            background-color: #e8eaed;
-            color: black;
-            font-family: serif;
+        .stApp {
+            background-color: #D3D3D3;
         }
-        .header {
+
+        section[data-testid="stSidebar"] {
+            background-color: #f0f0f0 !important;
+        }
+
+         .header {
             background-color: #005c99;
             color: white;
             padding: 1rem;
@@ -20,30 +25,71 @@ st.markdown("""
             font-weight: 800; /* extra bold */
             font-family: serif;
         }
-        .result-box {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            height: 100%;
-            color: black;
-            font-family: serif;
-            font-weight: 800;
-        }
-        .stTextInput > div > div > input {
-            font-weight: 800;
-            background-color: white;
-            font-family: serif;
-        }
-        .stButton > button {
-            background-color: #007acc;
+
+        .main-header h1, .main-header h3 {
             color: white;
-            font-weight: 800;
+            margin: 0;
+        }
+
+        summary {
+            background-color: #003366 !important;
+            color: white !important;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        details[open] > summary ~ * {
+            background-color: white !important;
+            padding: 16px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        details {
+            margin-bottom: 20px;
+        }
+                 /* Expander header  */
+        summary {
+            background-color: #003366 ;
+            color: white !important;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 800; /* extra bold */
             font-family: serif;
         }
+
+        /* Expander content box */
+        details[open] > summary ~ * {
+            background-color: white !important;
+            padding: 16px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Space between expanders (if multiple used) */
+        details {
+            margin-bottom: 20px;
+        }
+        div.stButton > button {
+    background-color: #fffff;
+    color: black;
+    font-weight: bold;
+    border: None;
+    border-radius: 8px;
+    padding: 0.5em 1em;
+}
+
+div.stButton > button:hover {
+    background-color: #002244;
+    color: white;
+}
     </style>
 """, unsafe_allow_html=True)
 
+# ---------- HEADER ----------
 st.markdown("""
    <div class='header' style="line-height: 1.2;">
     <h8 style="margin-bottom: 0;">AURA</h8>
@@ -51,30 +97,77 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-left_col, right_col = st.columns([1, 2.5])
+# ---------- SIDEBAR ----------
+with st.sidebar:
+    st.header("AURA")
 
-with left_col:
-    st.subheader("Upload")
-    uploaded_file = st.file_uploader("Upload a document", type=["pdf", "txt", "docx"])
+    # Regulation selection
+    selected_regulation = st.selectbox("Choose Regulation:", [
+        "Regulation 2021", "Regulation 2019", "Regulation 2017"
+    ])
 
-    st.subheader("Ask")
-    question = st.text_input("Your Question", placeholder="e.g., What is the document about?")
+    # Action selector
+    action = st.radio("Choose Action", [
+        "Compare Previous vs Latest Regulation",
+        "New Regulation"
+    ])
+    st.markdown("-----------------------------")
+    if st.button("History"):
+        st.info("Getting history")
+    st.markdown("-----------------------------")
+    if st.button("Documentation"):
+        st.info("Getting history")
 
-    get_answer = st.button("Get Answer")
 
-with right_col:
-    st.subheader("Result")
-    st.markdown('<div class="result-box">', unsafe_allow_html=True)
+# ---------- MAIN PAGE ----------
 
-    if get_answer:
-        if not uploaded_file:
-            st.error("Please upload a document.")
-        elif not question.strip():
-            st.error("Please type a question.")
+st.subheader("Dashboard")
+col1, col2, col3, col4, col5 = st.columns(5)
+
+with col1:
+    if st.button(" 🔄 Regenerate Graph"):
+        st.info("Regenerate ")
+
+with col2:
+    if st.button(" 📁 Download the KOP"):
+        st.success("KOP is being downloaded")
+
+with col3:
+    if st.button(" 📊 Download New Graph"):
+        st.info("Download New Graph selected.")
+
+with col4:
+    if st.button(" 📄 Download the BRD"):
+        st.info("Download New Graph selected.")
+
+with col5:
+    if st.button("🏠 Home Page"):
+        st.info("Go to home page selected.")
+
+st.subheader("Upload Regulations")
+
+# Upload New Regulation
+new_pdf = st.file_uploader("Upload New Regulation PDF", type=["pdf"])
+
+# Upload Old Regulation (if comparing)
+old_pdf = None
+if action == "Compare Previous vs Latest Regulation":
+    old_pdf = st.file_uploader("Upload Old Regulation PDF", type=["pdf"])
+
+# Upload Button
+if st.button("Upload"):
+    if action == "Compare Previous vs Latest Regulation":
+        if new_pdf and old_pdf:
+            st.success(f"Both PDFs uploaded:\n- Old: {old_pdf.name}\n- New: {new_pdf.name}")
         else:
-            st.success(f"Answer to: {question}")
-            st.write("This is a placeholder answer. Connect to a model backend here.")
+            st.warning("Please upload both Old and New regulation PDFs.")
     else:
-        st.info("Upload a document and ask a question to see the result here.")
+        if new_pdf:
+            st.success(f"Uploaded New Regulation PDF: {new_pdf.name}")
+        else:
+            st.warning("Please upload the New Regulation PDF.")
+with st.expander("OUR USE CASE"):
+    st.markdown("""
+Develop models to automatically analyze and interpret financial regulations, public legal documents, and compliance policies, ensuring adherence to relevant laws and guidelines. Illustrative examples include tracking changes in financial regulations and impact assessments, monitoring AML & KYC compliance, creating automated compliance checks.    """)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown("-----------------------------")
